@@ -1,0 +1,60 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+  <div class="timeline">
+	  <div>
+    	<form id="update-form" action="/user/profile" method="post">
+      	<div class="input-group">
+        <label for="update-nick">닉네임</label>
+        <input id="update-nick" type="text" name="nick"></div>
+      	<div class="input-group">
+        <label for="update-password">비밀번호</label>
+        <input id="update-password" type="password" name="password">
+      </div>
+      <button id="update-btn" type="submit" class="btn">프로필 수정</button>
+    </form>
+	  </div>
+    <div class="followings half">
+      <h2>팔로잉 목록</h2>
+      {% if user.Followings %}
+        {% for following in user.Followings %}
+			<input type="hidden" value="{{following.id}}" class="following-user-id">
+        	<div>{{following.nick}}</div>
+			<button class="twit-follow-X">팔로우 취소</button>
+        {% endfor %}
+      {% endif %}
+    </div>
+    <div class="followers half">
+      <h2>팔로워 목록</h2>
+      {% if user.Followers %}
+        {% for follower in user.Followers %}
+         	<div>{{follower.nick}}</div>
+        {% endfor %}
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}
+
+{% block script %}
+  <script>  
+    document.querySelectorAll('.twit-follow-X').forEach(function(tag) {
+      tag.addEventListener('click', function() {
+        const myId = document.querySelector('#my-id');
+        if (myId) {
+          const userId = tag.parentNode.querySelector('.following-user-id').value;
+          if (userId !== myId.value) {
+            if (confirm('팔로우 취소하시겠습니까?')) {
+              axios.delete(`/user/${userId}/follow`)
+                .then(() => {
+                  location.reload();
+                })
+                .catch((err) => {
+                  console.error(err);
+                });
+            }
+          }
+        }
+      });
+    });
+  </script>
+{% endblock %}
