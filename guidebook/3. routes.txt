@@ -1,0 +1,134 @@
+필요한 기능 -> REST API
+-----------------------------------------------------------
+메인 페이지
+	모든 게시글을 순서대로 볼 수 있음
+	해시태그를 검색하여 해당 게시글만 볼 수 있음
+	로그인 시
+		팔로워, 팔로우 유저 수 볼 수 있음
+		프로필 페이지 이동 가능
+		로그 아웃 가능
+		게시글 유저 팔로우 가능
+		게시글 좋아요 누르기 및 취소하기
+		게시글 삭제하기
+		글&사진&해시태그 올리기 가능
+	로그인 아닐 시
+		로그인
+		회원 가입 사이트 이동 가능
+		
+회원 가입 페에지
+	로그인 아닐 시 회원 가입 가능 후 메인 페이지 이동
+
+프로필 페이지
+	로그인 시 회
+		사용자의 팔로워, 팔로우 유저를 보여줌, 팔로잉 끊을 수 있음
+		프로필 정보 변경 할 수 있음
+-----------------------------------------------------------
+page.js
+필요 모듈 isLoggedIn, isNotLoggedIn
+필요 모델 Post, Hashtag, PostHashtag
+
+
+
+로그인시 프로필 페이지 이동가능
+get /profile
+isLoggedIn -> render('profile.html', title);
+
+
+로그인이 아닐 시 회원가입 사이트 이동 가능
+get /join
+isNotLoggedIn -> render('join.html', title);
+
+모든 게시글 볼 수 있음
+get /
+posts = 'SELECT * FROM nodebird.Post'
+posts.contenter
+posts.content
+posts.img
+render(main.html)
+
+해당 해시태그를 가진 게시글 만 볼 수 있음
+get /hashtag?hashtag=query
+title
+hashtagId = SELECT Hashtag.id FROM Hashtag WHERE title=query
+posthashtags = SELECT postId FROM PostHashtag WHERE hashtadId = ${hashtagId}
+for hashtag each hashtags
+posts = SELECT * FROM POST WHERE postId = ${posthashtag.postId}
+SELECT * FROM Hashtag
+
+
+-----------------------------------------------------------
+auth.js
+필요 모듈 isLoggedIn, isNotLoggedIn
+
+로그인이 아닐 시 회원가입 가능
+post /auth/join
+
+성공시 return res.redirect('/');
+실패시 return next(error);
+
+로그인이 아닐 시 로그인 가능
+post /auth/login
+passport.authenticate('local', (authError, user, info) => {
+	req.login();
+});
+로그인 성공시
+done(null, exUser);
+passport.authenticate('local', (authError = null, user = exUser, info));
+
+
+
+
+성공시 return res.redirect('/');
+실패시 return next(error);
+
+로그인시 로그 아웃 가능
+get /auth/logout
+
+
+get /auth/kakao
+
+
+get /auth/kakao/callback
+
+-----------------------------------------------------------
+post.js
+필요 모듈 isLoggedIn, isNotLoggedIn
+
+
+로그인시 사진 올리기 가능
+post /post/img
+
+로그인시 게시글 작성하기 가능
+post /post/
+
+로그인시 게시글 좋아요 누르기 및 취소하기
+get /post/:postid/like
+
+로그인시 게시글 삭제하기
+get /post/:postid/
+
+-----------------------------------------------------------
+user.js
+필요 모듈 isLoggedIn, isNotLoggedIn
+
+
+로그인시 게시글 유저 팔로우 가능
+post /:id/follow
+isLoggedIn -> 
+
+로그인시 팔로잉 끊을 수 있음
+post /:id/notFollow
+
+로그인시 프로필 정보 변경 할 수 있음
+post /profile
+-----------------------------------------------------------
+middlewares.js
+exports.modules = {
+isLoggedIn
+req.isAuthenticated()
+
+IsNotLoggedIn
+}
+-----------------------------------------------------------
+
+-----------------------------------------------------------

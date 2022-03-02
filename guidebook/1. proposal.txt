@@ -1,0 +1,112 @@
+간단한 사진을 올리는 SNS
+
+메인 페이지
+	게시글을 볼 수 있음
+	로그인 시
+		로그 아웃 가능
+		게시글 팔로우 가능
+		글&사진&해시태그 올리기 가능
+		프로필 페이지 이동 가능
+		팔로워, 팔로우 유저 수 볼 수 있음
+	로그인 아닐 시
+		로그인, 회원 가입 사이트 이동 가능
+		
+회원 가입 페에지
+	로그인 아닐 시 회원 가입 가능 후 메인 페이지 이동
+
+프로필 페이지
+	로그인 시 회원들의 팔로워, 팔로우 유저를 보여줌
+-----------------------------------------------------------
+DB
+
+필요한 객체 User, Post, Hashtag
+
+필요한 테이블
+USER
+	ID			AUTO_INCREMENT NUM
+	NICKNAME	STRING
+	EMAIL		STRING NOTNULL
+	PASSWORD	STRING NOTNULL
+	PROVIDER	STRING NOTNULL
+	SNSID		STRING
+
+FOLLOW
+	FOLLOWING	USER ID NUM
+	FOLLOWER	USER ID NUM
+	
+POST
+	ID			AUTO_INCREMENT NUM
+	USER		FOREIGN KEY NUM NOTNULL
+	CONTENTS	STRING NOTNULL
+	IMG			STRING
+
+HASHTAG
+	ID			AUTO_INCREMENT NUM
+	TITLE		STRING
+
+POSTHASTAG
+	POST ID		NUM
+	HASHTAG ID	NUM
+-----------------------------------------------------------
+사용할 모듈
+
+Server
+Server:			express
+Develop:		nodemon (-D)	
+networktest:	morgan			
+security:		dotenv			
+
+DB:				mysql			
+
+Login
+cookie		cookie-parser
+session		express-session
+login		passport, passport-local, ...
+security	bcrypt
+
+front
+rendering	nunjucks
+
+mainFunction
+img_post	multer
+-----------------------------------------------------------
+디렉토리
+
+DB: Mysql
+/config
+
+front: nunjucks
+/views
+/public
+
+라우터
+/routes
+
+로그인
+/passport
+
+콘텐츠(사진)
+/uploads
+
+서버 구동
+app.js
+
+보안
+.env
+서버: node.js -> express
+-----------------------------------------------------------
+서버 구조
+/config
+/migrations
+/models
+/seeders
+/node_modules
+/passport
+/pulic
+/routes
+/views
+app.js
+package-lock.json
+package.json
+.env
+-----------------------------------------------------------

@@ -1,0 +1,11 @@
+DROP TABLE IF EXISTS  nodebird.Post;
+CREATE TABLE nodebird.Post (
+id INT NOT NULL AUTO_INCREMENT,
+contenter INT NOT NULL, 
+content VARCHAR(140) NOT NULL,
+img VARCHAR(200),
+PRIMARY KEY(id),
+INDEX contented_idx (contenter ASC),
+CONSTRAINT contenter FOREIGN KEY (contenter) REFERENCES nodebird.User (id) ON DELETE CASCADE ON UPDATE CASCADE)
+DEFAULT CHARACTER SET = utf8
+ENGINE = InnoDB;

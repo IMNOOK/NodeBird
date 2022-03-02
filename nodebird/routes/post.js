@@ -53,8 +53,6 @@ router.post('/', isLoggedIn, upload2.none(), async (req, res, next) => {
 					return createHashtag[0].insertId;
 				})
 			);
-			console.log('this is result ');
-			console.log(result);
 			result.map( async (r) => {
 				console.log(createPost[0].insertId, r);
 				const createPostHashtag = await con.query(`INSERT INTO PostHashtag(postId, hashtagId) VALUES(?, ?)` ,[createPost[0].insertId ,r]);
