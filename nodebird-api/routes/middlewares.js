@@ -1,19 +1,20 @@
 const mysql = require("mysql2");
-const dbconfig = require("../config");
+const dbconfig = require("../config"); 
 const pool = mysql.createPool(dbconfig);
 
 //DB
 exports.con = pool.promise();
 
+
 //Loggin
 exports.isLoggedIn = (req, res, next) => {
-	if(req.isAuthenticated()){
+	if(req.isAuthenticated()) {
 		next();
-	} else{
+	} else {
 		res.status(403).send('로그인 필요');
 	}
 };
-
+	  
 exports.isNotLoggedIn = (req, res, next) => {
 	if(!req.isAuthenticated()){
 		next();
