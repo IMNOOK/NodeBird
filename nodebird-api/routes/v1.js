@@ -22,7 +22,6 @@ router.post('/token', async (req, res) => {
 			nick: domain.nick,
 		}, process.env.JWT_SECRET, {
 			expiresIn: '1m', // 유효 기간 1분
-			issure: 'nodebird', // 발급자
 		});
 		return res.json({
 			code: 200,
@@ -40,6 +39,51 @@ router.post('/token', async (req, res) => {
 
 router.get('/test', verifyToken, (req, res) => {
 	res.json(req.decoded);
+});
+
+router.get('/posts/my', verifyToken, async (req, res,) =>  {
+	try{
+		let [rows, fields] = await con.query('SELECT * FROM Post WHERE contenter = ?' ,req.decoded.id);
+		console.log(rows);
+		const posts = rows;
+		res.json({
+			code: 200,
+			payload: posts,
+		});
+	} catch(error){
+		console.error(error);
+		return res.status(500).json({
+			code: 500,
+			message: '서버 에러',
+		});
+	}
+})
+
+router.get('/posts/hashtag/:title', verifyToken, async (req, res) => {
+	try{
+		let [rows, fields] = await con.query('SELECT * FROM Hashtag WHERE title = ?', req.params.title);
+		const hashtag = rows[0];
+		console.log(hashtag);
+		if(hashtag.length == 0){
+			return res.status(404).json({
+				code: 404,
+				message: '검색 결과가 없습니다',
+			});
+		}
+		[rows, fields] = await con.query('SELECT * FROM Post JOIN PostHashtag ON Post.id = PostHashtag.postId WHERE PostHashtag.hashtagId = ?', hashtag.id);
+		const posts = rows;
+		console.log(posts);
+		return res.json({
+			code: 200,
+			payload: posts,
+		});
+	} catch (error) {
+		console.error(error);
+		return res.status(500).json({
+			code: 500,
+			message: '서버 에러',
+		});
+	}
 });
 
 module.exports = router;

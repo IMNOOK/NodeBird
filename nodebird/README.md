@@ -12,5 +12,9 @@ render을 최소화 -> 속도 높임
 4) post에 댓글 달기
 기능 +
 
+5) post 수정
+
+6) post 삭제시 hashtag 및 PostHashtag 삭제
+
 2.x.x
 1) 사진이 아니라 만화 올리기 기능
