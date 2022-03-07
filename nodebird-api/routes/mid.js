@@ -2,7 +2,7 @@ const mysql = require("mysql2");
 const dbconfig = require("../config"); 
 const pool = mysql.createPool(dbconfig);
 const jwt = require('jsonwebtoken');
-const {RateLimit} = require('express-rate-limit');
+const RateLimit = require('express-rate-limit');
 
 //DB
 exports.con = pool.promise();

@@ -2,7 +2,7 @@ const express = require('express');
 const axios = require('axios');
 
 const router = express.Router();
-const URL = 'https://imnook-develop.run.goorm.io/v1';
+const URL = 'https://imnook-develop.run.goorm.io/v2';
 axios.defaults.headers.origin = 'https://imnook-nodecat.run.goorm.io';
 const request = async (req, api) => {
 	try {
