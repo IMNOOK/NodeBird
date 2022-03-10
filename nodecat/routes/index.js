@@ -4,6 +4,7 @@ const axios = require('axios');
 const router = express.Router();
 const URL = 'https://imnook-develop.run.goorm.io/v2';
 axios.defaults.headers.origin = 'https://imnook-nodecat.run.goorm.io';
+
 const request = async (req, api) => {
 	try {
 		if (!req.session.jwt) { // 세션에 토큰이 없으면 토큰 발급 시도
@@ -23,6 +24,10 @@ const request = async (req, api) => {
 		return error.response;
 	}
 };
+
+router.get('/', (req, res) => {
+	res.render('main', { key: process.env.CLIENT_SECRET });
+});
 
 router.get('/mypost', async (req, res, next) => {
 	try{

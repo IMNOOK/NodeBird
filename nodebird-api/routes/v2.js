@@ -1,11 +1,14 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
+const cors = require('cors');
 
 const { verifyToken, apiLimiter, con } = require('./middlewares');
 
 const router = express.Router();
 
-router.use(apiLimiter);
+router.use(cors({
+	credenitals: true,
+}));
 
 router.post('/token', apiLimiter, async (req, res) => {
 	const {clientSecret} = req.body;
@@ -85,3 +88,5 @@ router.get('/posts/hashtag/:title', verifyToken, apiLimiter, async (req, res) =>
 		})
 	}
 })
+
+module.exports = router;

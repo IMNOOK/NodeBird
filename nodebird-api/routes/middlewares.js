@@ -2,7 +2,9 @@ const mysql = require("mysql2");
 const dbconfig = require("../config"); 
 const pool = mysql.createPool(dbconfig);
 const jwt = require('jsonwebtoken');
-const {RateLimit} = require('express-rate-limit');
+const rateLimit = require('express-rate-limit');
+
+
 
 //DB
 exports.con = pool.promise();
@@ -44,16 +46,15 @@ exports.verifyToken = (req, res, next) => {
 	}
 };
 
-exports.apiLimiter = new RateLimit({
-  windowMs: 60 * 1000, // 1분
-  max: 10,
-  delayMs: 0,
-  handler(req, res) {
-    res.status(this.statusCode).json({
-      code: this.statusCode, // 기본값 429
-      message: '1분에 한 번만 요청할 수 있습니다.',
-    });
-  },
+exports.apiLimiter = rateLimit({
+	windowMs: 60 * 1000, // 1 minutes
+	max: 10, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
+	handler(req, res) {
+		res.status(this.statusCode).json({
+			code: this.statusCode, //기본값 429
+			message: '1분에 10번만 요청할 수 있습니다.'
+		});
+	}
 });
 
 exports.deprecated = (req, res) => {
