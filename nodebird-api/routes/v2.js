@@ -1,14 +1,26 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
+const url = require('url');
 
 const { verifyToken, apiLimiter, con } = require('./middlewares');
 
 const router = express.Router();
 
-router.use(cors({
-	credenitals: true,
-}));
+router.use(async (req, res, next) => {
+	const host = url.parse(req.get('origin')).host
+	console.log(host);
+	let [rows, fields] = await con.query('SELECT * FROM Domain WHERE host = ?', host);
+	console.log(rows);
+	if(rows.length != 0) {
+		cors({
+			origin: req.get('origin'),
+			credentials: true,
+		})(req, res, next);
+	} else {
+		next();
+	}
+});
 
 router.post('/token', apiLimiter, async (req, res) => {
 	const {clientSecret} = req.body;

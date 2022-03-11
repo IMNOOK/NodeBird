@@ -7,7 +7,7 @@
   <div id="result"></div>
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script>
-    axios.post('http://localhost:8002/v2/token', {
+    axios.post('https://imnook-develop.run.goorm.io/v2/token', {
       clientSecret: '{{key}}',
     })
       .then((res) => {
