@@ -33,10 +33,10 @@
             {% if not followerIdList.includes(twit.contenter) and twit.contenter !== user.id %}
               <button class="twit-follow">팔로우하기</button>
             {% endif %}
-            {% if not goodPostIdList.includes(twit.contenter) and twit.contenter !== user.id %}
+            {% if not goodPostIdList.includes(twit.id) and twit.contenter !== user.id %}
               <button class="twit-like">좋아요하기</button>
 			{% endif %}
-            {% if goodPostIdList.includes(twit.contenter) and twit.contenter !== user.id %}
+            {% if goodPostIdList.includes(twit.id) and twit.contenter !== user.id %}
 			  <button class="twit-dislike">좋아요</button>
 			{% endif %}
 			{% if twit.contenter == user.id %}
@@ -130,7 +130,7 @@
         const myId = document.querySelector('#my-id');
         if (myId) {
           const postId = tag.parentNode.querySelector('.twit-id').value;
-          if (confirm('좋아요 취소하겠습니까?')) {
+          if (confirm('게시물을 삭제하시겠습니까?')) {
               axios.delete(`/post/${postId}`)
                 .then(() => {
                   location.reload();

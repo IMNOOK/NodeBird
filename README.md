@@ -35,9 +35,18 @@ $ git checkout <branch>
 
 ------------데이터베이스--------------------------------------------------------------------------------------------------------
 
-mysql 설치 및 기타 설정 apt-get install mysql-server mysql-client service mysql start use mysql; set global validate_password_policy=LOW; GRANT ALL PRIVILEGES ON . to 'root'@'%' IDENTIFIED BY 'dhksthxpa12'; flush privileges;
+mysql 설치 및 기타 설정 
+apt-get install mysql-server mysql-client 
+service mysql start
+use mysql; 
+create user 'IMNOOK'@'%' identified by 'dhksthxpa12';
+GRANT ALL PRIVILEGES ON *.* to 'IMNOOK'@'%' IDENTIFIED BY 'dhksthxpa12'; 
+flush privileges;
 
-포트포워딩 준비 vim /etc/mysql/mysql.conf.d/mysqld.cnf //포트 변경 or bind-address 주석처리 /etc/init.d/mysql restart 컨테이너 - 포트포워딩 IP와 외부 포트, 내부 포트(3306) 확인
+포트포워딩 준비 
+vim /etc/mysql/mysql.conf.d/mysqld.cnf //포트 변경 or bind-address 주석처리 
+/etc/init.d/mysql restart 
+컨테이너 - 포트포워딩 IP와 외부 포트, 내부 포트(3306) 확인
 
 $ vim /etc/mysql/my.cnf
 해당 파일의 마지막에 다음과 같은 내용을 덧붙여준다.
