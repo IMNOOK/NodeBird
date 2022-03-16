@@ -1,12 +1,12 @@
 //다른 사람들이 만든 모듈
 const express = require('express');
+const fs = require('fs');
 const multer = require('multer');
 const path = require('path');
-const fs = require('fs');
-
 
 // 내가 만든 모듈 or 미리 설정한 값 가져옴 
-const { isLoggedIn, con } = require('./middlewares');
+const { isLoggedIn } = require('./middlewares');
+const { posting } = require('../controllers/post');
 
 // routes 코드 시작 및 각종 설정
 const router = express.Router();
@@ -37,48 +37,8 @@ router.post('/img', isLoggedIn, upload.single('img'), (req, res) => {
 });
 
 const upload2 = multer();
-router.post('/', isLoggedIn, upload2.none(), async (req, res, next) => {
-	try{
-		const createPost = await con.query(`INSERT INTO Post(contenter, content, img) VALUES (?, ?, ?)`, [req.user.id, req.body.content, req.body.url]);
-		const hashtag = req.body.content.match(/#[^\s#]+/g);
-		if(hashtag) {
-			const result = await Promise.all(
-				hashtag.map( async (tag) => {
-					console.log(tag.slice(1).toLowerCase());
-					let [rows, fields]= await con.query(`SELECT * FROM Hashtag WHERE title = ?` ,tag.slice(1).toLowerCase());
-					if(rows.length != 0){
-						return rows[0].id;
-					}
-					const createHashtag = await con.query(`INSERT INTO Hashtag(title) VALUES (?)`,tag.slice(1).toLowerCase());
-					return createHashtag[0].insertId;
-				})
-			);
-			result.map( async (r) => {
-				console.log(createPost[0].insertId, r);
-				const createPostHashtag = await con.query(`INSERT INTO PostHashtag(postId, hashtagId) VALUES(?, ?)` ,[createPost[0].insertId ,r]);
-			});
-		}
-	return res.redirect('/');
-	} catch (error) {
-		console.error(error);
-		next(error);
-	}
-});
+router.post('/', isLoggedIn, upload2.none(), (req, res, next) => posting(req, res, next));
 
-router.delete('/:id', isLoggedIn, async (req, res, next) => {
-	const postId  = req.params.id;
-	try{
-		let [rows, fields] = await con.query('SELECT * FROM Post WHERE id = ? AND contenter = ?', [postId, req.user.id]);
-		if(rows.length != 0) {
-			await con.query('DELETE FROM Post WHERE id = ? AND contenter = ?', [postId, req.user.id]);
-		}
-	} catch (error) {
-		console.error(error);
-		next(error);
-	}
-	return res.render('main', {
-			title: 'NodeBird'
-	});
-});
+router.delete('/:id', isLoggedIn, (req, res, next) => deletePost(req, res, next));
 
 module.exports = router;
