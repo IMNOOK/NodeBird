@@ -29,7 +29,7 @@
           <div class="twit">
             <input type="hidden" value="{{twit.contenter}}" class="twit-user-id">
             <input type="hidden" value="{{twit.id}}" class="twit-id">
-            <div class="twit-author">Auther {{twit.contenter}}</div>
+            <div class="twit-author">Auther {{twit.auther}}</div>
             {% if not followerIdList.includes(twit.contenter) and twit.contenter !== user.id %}
               <button class="twit-follow">팔로우하기</button>
             {% endif %}

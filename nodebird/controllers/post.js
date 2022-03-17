@@ -9,9 +9,12 @@ exports.posting = async (req, res, next) => {
 		if(hashtag) {
 			const result = await Promise.all(
 				hashtag.map( async (tag) => {
-					const tags = tag.slice(1).toLowerCase();
-					const createHashtag = await con.query('INSERT INTO Hashtag (title) SELECT ? FROM dual WHERE NOT EXISTS (SELECT *  FROM Hashtag WHERE  title = ?)', [tags, tags]);
-					console.log(createHashtag);
+					let title = tag.slice(1).toLowerCase();
+					let [rows, fields] = await con.query('SELECT Hashtag.id FROM Hashtag WHERE  title = ?',title);
+					if( rows.length != 0) {
+						return rows[0].id;
+					}
+					const createHashtag = await con.query('INSERT INTO Hashtag(title) VALUES (?)', title);
 					return createHashtag[0].insertId;
 				})
 			);

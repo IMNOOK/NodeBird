@@ -6,7 +6,7 @@ const path = require('path');
 
 // 내가 만든 모듈 or 미리 설정한 값 가져옴 
 const { isLoggedIn } = require('./middlewares');
-const { posting } = require('../controllers/post');
+const { posting, deletePost } = require('../controllers/post');
 
 // routes 코드 시작 및 각종 설정
 const router = express.Router();
@@ -36,9 +36,13 @@ router.post('/img', isLoggedIn, upload.single('img'), (req, res) => {
 	res.json({url: `/img/${req.file.filename}`});
 });
 
+
+//게시판 글 올림
 const upload2 = multer();
 router.post('/', isLoggedIn, upload2.none(), (req, res, next) => posting(req, res, next));
 
+
+//유저 == 글쓴이 시 게시판 삭제
 router.delete('/:id', isLoggedIn, (req, res, next) => deletePost(req, res, next));
 
 module.exports = router;
