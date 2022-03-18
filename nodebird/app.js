@@ -15,7 +15,7 @@ const pageRouter = require('./routes/page');
 const authRouter = require('./routes/auth');
 const postRouter = require('./routes/post');
 const userRouter = require('./routes/user');
-const passportConfig = require('./passport'); //passport 설정들 가져옴
+const {passportConfig} = require('./passport'); //passport 설정들 가져옴
 
 
 // server 코드 시작 및 각종 설정
