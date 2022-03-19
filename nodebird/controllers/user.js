@@ -19,8 +19,8 @@ exports.following = async (req, res, next) => {
 	const follower = req.params.id;
 	try{
 		await con.query('INSERT INTO Follow(followingId, followerId) SELECT ?,? FROM DUAL WHERE NOT EXISTS (SELECT * FROM Follow WHERE followingId = ? AND followerId = ?)',[req.user.id, follower, req.user.id, follower]);
-		UserCache[req.user.id].Followers = -1;
-		return res.render('profile', { title: '내 정보 - NodeBird' });
+		UserCache[req.user.id].Status = 1;
+		return res.redirect('/');
 	} catch(error){
 		console.error(error);
 		next(error);
@@ -32,8 +32,8 @@ exports.followDelete = async (req, res, next) => {
 	const follower = req.params.id;
 	try{
 		await con.query('DELETE FROM Follow WHERE followingId = ? AND followerId = ?', [req.user.id, follower]);
-		UserCache[req.user.id].Followers = -1;
-		return res.render('profile', { title: '내 정보 - NodeBird' });
+		UserCache[req.user.id].Status = 1;
+		return res.redirect('/profile');
 	} catch(error) {
 		console.error(error);
 		next(error);
@@ -44,8 +44,8 @@ exports.likeing = async (req, res, next) => {
 	const postid = req.params.id;
 	try{
 		await con.query('INSERT INTO Good (userId, postId) SELECT ?, ? FROM DUAL WHERE NOT EXISTS (SELECT * FROM Good WHERE userId = ? AND postId = ?)', [req.user.id, postid, req.user.id, postid]);
-		UserCache[req.user.id].GoodPostId = -1;
-		return res.render('main', { title: 'NodeBird' });
+		UserCache[req.user.id].Status = 2;
+		return res.redirect('/');
 	} catch(error) {
 		console.error(error);
 		next(error);
@@ -56,8 +56,8 @@ exports.likeDelete = async (req, res, next) => {
 	const postid = req.params.id;
 	try{
 		await con.query('DELETE FROM Good WHERE userId = ? AND postId = ?', [req.user.id, postid]);
-		UserCache[req.user.id].GoodPostId = -1;
-		return res.render('main', { title: 'NodeBird' });
+		UserCache[req.user.id].Status = 2;
+		return res.redirect('/');
 	} catch(error) {
 		console.error(error);
 		next(error);

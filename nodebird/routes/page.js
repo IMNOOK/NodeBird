@@ -17,6 +17,12 @@ router.use((req, res, next) => {
 	res.locals.followerCount = req.user ? req.user.Followers.length : 0;
 	res.locals.followingCount = req.user ? req.user.Followings.length : 0;
 	res.locals.followerIdList = req.user ? req.user.Followings.map(f => f.followerId) : [];
+	if(req.user) {
+		console.log("FOLLOWINGS")
+		console.log(req.user.Followings);
+		console.log("GOODPost")
+		console.log(req.user.GoodPostId);
+	}
 	res.locals.goodPostIdList = req.user ? req.user.GoodPostId.map(u => u.postId) : [];
 	next();
 });
