@@ -2,8 +2,8 @@
 const express = require('express');
 
 // 내가 만든 모듈 or 미리 설정한 값 가져옴 
-const { isLoggedIn, isNotLoggedIn } = require('./middlewares');
-const { getMain, getHashtag } = require('../controllers/page');
+const { isLoggedIn, isNotLoggedIn } = require('../controllers/middlewares');
+const { UI, getMain, getHashtag } = require('../controllers/page');
 
 // routes 코드 시작 및 각종 설정
 const router = express.Router();
@@ -12,20 +12,7 @@ const router = express.Router();
 //post처럼 모든 자료를 끌고 오는 것이 아니라 각각의 개인 유저의 필요한 정보만 가져옴
 
 //로그인 시 req.user로 부터 렌더링 값 설정
-router.use((req, res, next) => {
-	res.locals.user = req.user;
-	res.locals.followerCount = req.user ? req.user.Followers.length : 0;
-	res.locals.followingCount = req.user ? req.user.Followings.length : 0;
-	res.locals.followerIdList = req.user ? req.user.Followings.map(f => f.followerId) : [];
-	if(req.user) {
-		console.log("FOLLOWINGS")
-		console.log(req.user.Followings);
-		console.log("GOODPost")
-		console.log(req.user.GoodPostId);
-	}
-	res.locals.goodPostIdList = req.user ? req.user.GoodPostId.map(u => u.postId) : [];
-	next();
-});
+router.use((req, res, next) => UI(req, res, next));
 
 router.get('/profile', isLoggedIn, (req, res) => {
 	return res.render('profile', { title: '내 정보 - NodeBird' });

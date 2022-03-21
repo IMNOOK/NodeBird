@@ -1,7 +1,7 @@
 const passport = require('passport');
 const bcrypt = require('bcrypt');
 
-const { con } = require('./middlewares');
+const { con } = require('./db');
 
 exports.join = async (req, res, next) => {
 	const { email, nick, password } = req.body;

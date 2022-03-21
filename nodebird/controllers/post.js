@@ -1,8 +1,10 @@
-const { con } = require('./middlewares');
+const { con } = require('./db');
 
 exports.posting = async (req, res, next) => {
 	try{
-		console.log(req.body.content);
+		if(!req.body.content){
+			return res.redirect('/');
+		}
 		const createPost = await con.query('INSERT INTO Post(contenter, content, img) VALUES (?, ?, ?)', [req.user.id, req.body.content, req.body.url]);
 		
 		const hashtag = req.body.content.match(/#[^\s#]+/g);

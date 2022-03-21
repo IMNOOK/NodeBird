@@ -2,7 +2,7 @@
 const express = require('express');
 
 // 내가 만든 모듈 or 미리 설정한 값 가져옴 
-const { isLoggedIn, isNotLoggedIn } = require('./middlewares');
+const { isLoggedIn, isNotLoggedIn } = require('../controllers/middlewares');
 const { join, login } = require('../controllers/auth');
 
 // routes 코드 시작 및 각종 설정
@@ -18,6 +18,7 @@ router.get('/logout',isLoggedIn, (req, res, next) => {
 	res.redirect('/');
 });
 
+/* 카카오
 router.get('/kakao',isNotLoggedIn, (req, res, next) => {
 	try{
 		
@@ -35,5 +36,5 @@ router.get('/kakao/callback',isNotLoggedIn, (req, res, next) => {
 		next(error);
 	}	
 });
-
+*/
 module.exports = router;

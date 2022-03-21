@@ -5,7 +5,7 @@ const multer = require('multer');
 const path = require('path');
 
 // 내가 만든 모듈 or 미리 설정한 값 가져옴 
-const { isLoggedIn } = require('./middlewares');
+const { isLoggedIn } = require('../controllers/middlewares');
 const { posting, deletePost } = require('../controllers/post');
 
 // routes 코드 시작 및 각종 설정
