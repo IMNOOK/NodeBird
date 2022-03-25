@@ -33,7 +33,11 @@ exports.passportConfig = () => {
 			} else if(UserCache[id].Status == 2 ) { //좋아요 변경
 				[rows, fields] = await con.query('SELECT Good.postId FROM Good JOIN User ON Good.userId = User.id WHERE User.id = ?', id);
 				UserCache[id].GoodPostId = rows;
+			} else if(UserCache[id].Status == 3){ //닉네임 변경
+				[rows, fields] = await con.query('SELECT User.nick FROM User WHERE id = ?',id);
+				UserCache[id].nick = rows[0].nick;
 			}
+			//팔로워 변경값
 			[rows, fields] = await con.query('SELECT Follow.followingId, User.nick FROM Follow JOIN User ON Follow.followingId = User.id Where Follow.followerId = ?', id);
 			UserCache[id].Followers = rows;
 			done(null, UserCache[id]);
