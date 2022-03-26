@@ -1,0 +1,67 @@
+//INSERT
+
+INSERT INTO User (name, age, married, comment) VALUES ('zer', 24, 0, '자기소개1');
+User.create({
+	name: 'zer',
+	age: 24,
+	married: false,
+	comment: '자기소개1',
+});
+
+-------------------------------------------------------------------------
+//SELECT
+
+SELECT * FROM User;
+User.findAll({});
+
+SELECT * FROM User LIMIT 1;
+User.findOne({});
+
+
+1. attributes: 원하는 컬럼 선택
+SELECT name, married FROM User;
+User.findAll({
+	attributes: ['name', 'married'],
+});
+
+2. WHERE, order, limit, offset
+SELECT name, age FROM User WHERE married = 1 AND age > 30 ORDER BY age DESC LIMIT 1 OFFSET 1;
+User.findAll({
+	attributes: ['name', 'age'],
+	where: {
+		married: 'true',
+		age: { [Op.gt]: 30},
+	},
+	order: [['age', 'DESC']],
+	limit: 1,
+	offset: 1,
+});
+
+//Or
+SELECT name, age FROM User WHERE married = 1 Or age > 30;
+User.findAll({
+	attributes: ['name', 'age'],
+	where: {
+		[Op.or]: [{ married: 'true' }, { age: { [Op.gt]: 30 } }] 
+	},
+});
+-------------------------------------------------------------------------
+//UPDATE
+
+UPDATE User SET comment = '바꿀내용' WHERE id = 2;
+User.update({
+	comment: '바꿀 내용',
+}, {
+	where: { id: 2},
+});
+
+-------------------------------------------------------------------------
+DELETE
+
+DELETE FROM User WHERE id = 2;
+User.destory({
+	where: { id: 2 },
+})
+
+-------------------------------------------------------------------------
+관계 쿼리

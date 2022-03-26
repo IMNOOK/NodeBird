@@ -1,10 +1,12 @@
 추가해야할 기능
 1.x.x
 https://www.everdevel.com/JavaScript/innerText/
-0) control에서 모듈 정리
+0) MVC 패턴화
 라우터에서 함수들을 빼서 controller를 생성하고 -> 완료
-controller에서 DB와 연결이 필요한 부분을 빼서 -> 
+controller에서 DB와 연결이 필요한 부분을 빼서 models 생성 ->
+
 model에서 (DAO[Data Access Object]와 같은 역할!)을 작성
+이때 규칙 생성
 
 https://velog.io/@neity16/NodeJS-%EB%A1%9C%EC%A7%81-%EB%B6%84%EB%A6%ACroutesmodels-controllers
 

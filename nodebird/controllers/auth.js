@@ -1,17 +1,15 @@
 const passport = require('passport');
 const bcrypt = require('bcrypt');
 
-const { con } = require('./db');
+const { item } = require('../models/item');
 
 exports.join = async (req, res, next) => {
 	const { email, nick, password } = req.body;
 	try{
-		let [rows, fields] = await con.query('SELECT * FROM User WHERE email = ?', email);
-		if(rows.length != 0) {
+		const hash = await bcrypt.hash(password, 12);
+		if( item.User.setUser(email, nick, hash) == 0) {
 			return res.redirect('/join?error=exist');
 		}
-		const hash = await bcrypt.hash(password, 12);
-		await con.query('INSERT INTO User(email, nick, password) VALUES(?,?,?)', [email, nick, hash]);
 		return res.redirect('/');
 	} catch(error) {
 		console.error(error);
