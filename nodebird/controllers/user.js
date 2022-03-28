@@ -7,7 +7,7 @@ exports.updateProfile = async (req, res, next) => {
 	const { nick, password } = req.body;
 	const hash = await bcrypt.hash(password, 12);
 	try{
-		item.User.setUsernick(req.body.id, nick, hash);
+		item.User.setUserNick(req.body.id, nick, hash);
 		UserCache[req.user.id].Status = 3;
 		return res.redirect('/');
 	} catch(error) {

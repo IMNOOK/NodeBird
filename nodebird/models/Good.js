@@ -3,15 +3,15 @@ const dbconfig = require("../config");
 const pool = mysql.createPool(dbconfig);
 const con = pool.promise();
 
-const Post = {
-	getPost: async () => {
+const Good = {
+	getGoodByPostId: async(postId) => {
 		try{
-			let [rows, fields] = await con.query('SELECT * FROM Post');
+			const [rows, fields] = await con.query('SELECT * FROM Good WHERE Good.postId = ?', postId);
 			return rows;
-		} catch (error){
+		} catch(error) {
 			console.error(error);
 		}
 	}
 };
 
-exports.Post = Post;
+exports.Good = Good;

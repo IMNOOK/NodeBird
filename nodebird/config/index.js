@@ -1,17 +1,7 @@
 module.exports= {
-	develop: {
-		host	: '13.124.124.221',
-		port	: '50040',
+		host	: '13.125.61.186',
+		port	: '50839',
 		user	: 'IMNOOK',
 		password: 'dhksthxpa12',
-		database: 'nodebird',	
-	},
-
-	test: {
-		host	: '13.124.124.221',
-		port	: '50040',
-		user	: 'IMNOOK',
-		password: 'dhksthxpa12',
-		database: 'test',
-	}
+		database: 'nodebird',
 };
