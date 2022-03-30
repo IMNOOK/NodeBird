@@ -10,18 +10,28 @@ exports.UI = async (req, res, next) => {
 }
 
 exports.getMain = async (req, res, next) => {
-	const posts = await item.getAllPostInfo();
-	return res.render('main', {
-		title: 'NodeBird',
-		twits: posts,
-	});
+	try{
+		const posts = await item.getAllPostInfo();
+		return res.render('main', {
+			title: 'NodeBird',
+			twits: posts,
+		});	
+	} catch(error){
+		console.error(error);
+		return next(error);
+	}
 }
 
 exports.getHashtag = async (req, res, next) => {
 	const {hashtag} = req.query;
-	const posts = await item.getPostHashtagInfo(hashtag);
-	return res.render('main', {
-		title: 'NodeBird',
-		twits: posts,
-	});
+	try{
+		const posts = await item.getPostHashtagInfo(hashtag);
+		return res.render('main', {
+			title: 'NodeBird',
+			twits: posts,
+		});
+	} catch(error){
+		console.error(error);
+		return next(error);
+	}
 }

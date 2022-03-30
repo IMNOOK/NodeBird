@@ -35,7 +35,12 @@ const User = {
 	},
 	
 	getUserByEmail: async (email) => {
-		const [rows, fields] = await con.query('SELECT * FROM User WHERE User.email = ?', email);
+		try{
+			const [rows, fields] = await con.query('SELECT * FROM User WHERE User.email = ?', email);	
+		}
+		catch(error){
+			console.error(error);
+		}
 	}
 };
 

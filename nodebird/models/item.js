@@ -8,8 +8,33 @@ const { Post } = require('./Post');
 const { Hashtag } = require('./Hashtag');
 const { Good } = require('./Good');
 const { Follow } = require('./Follow');
+const { PostHashtag } = require('./PostHashtag');
 
 const item = {
+	
+	setPost: async(contenter, content, img) => {
+		if(!content){
+			return res.redirect('/');
+		}
+		const createPost = await Post.setPost(contenter, content, img);
+		const hashtag = content.match(/#[^\s#]+/g);
+		if(hashtag) {
+			const result = await Promise.all(
+				hashtag.map( async (tag) => {
+					let title =tag.slice(1).toLowerCase();
+					let rows = await Hashtag.getHashtag(title);
+					if (rows.length != 0) {
+						return rows[0].id;
+					}
+					const createHashtag = await Hashtag.setHashtag(title);
+					return createHashtag[0].insertId;
+				})
+			);
+			result.map(async (r) => {
+				await PostHashtag.setPostHashtag(createPost[0].insertId, r);
+			})
+		}
+	},
 	
 	getAllPostInfo: async () => {
 		const posts = await Post.getPost();
@@ -28,8 +53,7 @@ const item = {
 	},
 	
 	getPostHashtagInfo: async (hashtag) => {
-		let row = await Hashtag.getHashtagByTitle(hashtag);
-		console.log(row);
+		let row = await Hashtag.getHashtag(hashtag);
 		let posts;
 		try{
 			if(row.length != 0){
@@ -51,7 +75,7 @@ const item = {
 		}
 	},
 	
-	addFollow: async (id, follower) => {
+	setFollow: async (id, follower) => {
 		try{
 			let [rows, fields] = await con.query(`SELECT * FROM Follow WHERE followingId = ? AND followerId = ?`, [id, follower]);
 			if(rows.length == 0){
@@ -73,7 +97,7 @@ const item = {
 		}
 	},
 	
-	addLike: async (id, post) => {
+	setLike: async (id, post) => {
 		try{
 			let [rows, fields] = await con.query(`SELECT * FROM Good WHERE userId = ? AND postId = ?`, [id, post]);
 			if(rows.length == 0){
@@ -89,7 +113,7 @@ const item = {
 	
 	delLike: async (id, post) => {
 		try{
-			await con.query('DELETE FROM Good WHERE userId = ? AND postId = ?', [id, post]);	
+			await con.query(`DELETE FROM Good WHERE userId = ? AND postId = ?`, [id, post]);	
 		} catch(error) {
 			console.error(error);
 		}

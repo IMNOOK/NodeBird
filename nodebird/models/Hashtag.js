@@ -4,7 +4,16 @@ const pool = mysql.createPool(dbconfig);
 const con = pool.promise();
 
 const Hashtag = {
-	getHashtagByTitle: async (title) => {
+	setHashtag: async (title) => {
+		try{
+			const result = await con.query('INSERT INTO Hashtag(title) VALUES (?)', title);
+			return result;
+		} catch(error){
+			console.error(error);
+		}
+	},
+	
+	getHashtag: async (title) => {
 		try{
 			let [rows, fields] = await con.query('SELECT id FROM Hashtag WHERE title = ?' , title);
 			return rows;
