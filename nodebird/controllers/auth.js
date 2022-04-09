@@ -7,7 +7,7 @@ exports.join = async (req, res, next) => {
 	const { email, nick, password } = req.body;
 	try{
 		const hash = await bcrypt.hash(password, 12);
-		if( item.User.setUser(email, nick, hash) == 0) {
+		if(await item.User.setUser(email, nick, hash) == 0) {
 			return res.redirect('/join?error=exist');
 		}
 		return res.redirect('/');

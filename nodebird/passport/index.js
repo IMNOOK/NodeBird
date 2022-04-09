@@ -1,9 +1,8 @@
 const passport = require('passport');
 const local = require('./localStrategy');
-const mysql = require("mysql2/promise");
 const dbconfig = require("../config");
+const { item } = require('../models/item');
 
-const con = mysql.createPool(dbconfig);
 let UserCache = [];
 
 exports.passportConfig = () => {
@@ -19,27 +18,26 @@ exports.passportConfig = () => {
 	
 	passport.deserializeUser( async (id, done) => {
 		try{
-			let rows, fields;
+			let result;
 			console.log(UserCache[id].Status);
 			if(UserCache[id].Status == -1 ){ //초기값
-				[rows, fields] = await con.query('SELECT Follow.followerId, User.nick, User.id FROM Follow JOIN User ON Follow.followerId = User.id WHERE Follow.followingId = ?', id);
-				UserCache[id].Followings = rows;
-				[rows, fields] = await con.query('SELECT Good.postId FROM Good JOIN User ON Good.userId = User.id WHERE User.id = ?', id);
-				UserCache[id].GoodPostId = rows;
+				result = await item.getFollowing(id);
+				UserCache[id].Followings = result;
+				result = await item.getLike(id);
 				UserCache[id].Status = 0; //변경값 없음
 			} else if(UserCache[id].Status == 1 ) { //팔로잉 변경
-				[rows, fields] = await con.query('SELECT Follow.followerId, User.nick, User.id FROM Follow JOIN User ON Follow.followerId = User.id WHERE Follow.followingId = ?', id);
-				UserCache[id].Followings = rows;
+				result = await item.getFollowing(id);
+				UserCache[id].Followings = result;
 			} else if(UserCache[id].Status == 2 ) { //좋아요 변경
-				[rows, fields] = await con.query('SELECT Good.postId FROM Good JOIN User ON Good.userId = User.id WHERE User.id = ?', id);
-				UserCache[id].GoodPostId = rows;
+				result = await item.getLike(id);
+				UserCache[id].GoodPostId = result;
 			} else if(UserCache[id].Status == 3){ //닉네임 변경
-				[rows, fields] = await con.query('SELECT User.nick FROM User WHERE id = ?',id);
-				UserCache[id].nick = rows[0].nick;
+				result = await item.User.getUserNick(id);
+				UserCache[id].nick = result.nick;
 			}
 			//팔로워 변경값
-			[rows, fields] = await con.query('SELECT Follow.followingId, User.nick FROM Follow JOIN User ON Follow.followingId = User.id Where Follow.followerId = ?', id);
-			UserCache[id].Followers = rows;
+			result = await item.getFollower(id);
+			UserCache[id].Followers = result;
 			done(null, UserCache[id]);
 		} catch (error) {
 			console.error(error);

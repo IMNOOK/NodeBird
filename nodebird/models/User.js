@@ -5,11 +5,12 @@ const con = pool.promise();
 
 const User = {	
 	setUser: async (email, nick, password) => {
-		if(User.getUserByEmail(email)) {
+		const [rows, fields] = await con.query(`SELECT * FROM User WHERE User.email = ?`, email);
+		if(rows.length != 0) {
 			return 0;
 		} else {
 			try{
-				await con.query('INSERT INTO User(email, nick, password) VALUES(?,?,?)', [email, nick, password]);	
+				await con.query(`INSERT INTO User(email, nick, password) VALUES(?,?,?)`, [email, nick, password]);	
 			} catch(error){
 				console.error(error);
 			}
@@ -17,17 +18,26 @@ const User = {
 		}
 	},
 	
-	setUserNick: async (id, nick, password) => {
+	getUser: async (id) => {
 		try{
-			await con.query('UPDATE User SET nick = ? , password = ? WHERE id = ?', [nick, password, id]);	
+			const [rows, fields] = await con.query(`SELECT * FROM User WHERE User.id = ?`, id);
+			return rows[0];
 		} catch(error){
 			console.log(error);
 		}
 	},
 	
-	getUser: async (id) => {
+	setUserNick: async (id, nick, password) => {
 		try{
-			const [rows, fields] = await con.query('SELECT * FROM User WHERE User.id = ?', id);
+			const result = await con.query(`UPDATE User SET nick = ?, password = ? WHERE id = ?`, [nick, password, id]);
+		} catch(error){
+			console.log(error);
+		}
+	},
+	
+	getUserNick: async (id) => {
+		try{
+			const [rows, fields] = await con.query(`SELECT User.nick FROM User WHERE User.id = ?`, id);
 			return rows[0];
 		} catch(error){
 			console.log(error);
@@ -36,7 +46,8 @@ const User = {
 	
 	getUserByEmail: async (email) => {
 		try{
-			const [rows, fields] = await con.query('SELECT * FROM User WHERE User.email = ?', email);	
+			const [rows, fields] = await con.query(`SELECT * FROM User WHERE User.email = ?`, email);
+			return rows;
 		}
 		catch(error){
 			console.error(error);

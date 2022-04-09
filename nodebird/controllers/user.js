@@ -7,7 +7,7 @@ exports.updateProfile = async (req, res, next) => {
 	const { nick, password } = req.body;
 	try{
 		const hash = await bcrypt.hash(password, 12);
-		item.User.setUserNick(req.body.id, nick, hash);
+		await item.User.setUserNick(req.user.id, nick, hash);
 		UserCache[req.user.id].Status = 3;
 		return res.redirect('/');	
 	} catch(error){
@@ -19,7 +19,7 @@ exports.updateProfile = async (req, res, next) => {
 exports.following = async (req, res, next) => {
 	const follower = req.params.id;
 	try{
-		if(item.setFollow(req.user.id, follower)){
+		if(await item.setFollow(req.user.id, follower)){
 			UserCache[req.user.id].Status = 1;
 			return res.redirect('/');
 		}
@@ -34,7 +34,7 @@ exports.following = async (req, res, next) => {
 exports.followDelete = async (req, res, next) => {
 	const follower = req.params.id;
 	try{
-		item.delFollow(req.user.id, follower);
+		await item.delFollow(req.user.id, follower);
 		UserCache[req.user.id].Status = 1;
 		return res.send("DELETE succese");
 	} catch(error){
@@ -46,9 +46,9 @@ exports.followDelete = async (req, res, next) => {
 exports.likeing = async (req, res, next) => {
 	const postid = req.params.id;
 	try{
-		if(item.setLike(req.user.id, postid)){
+		if(await item.setLike(req.user.id, postid)){
 			UserCache[req.user.id].Status = 2;
-			return res.redirect('/');	
+			return res.redirect('/');
 		}
 		return res.send('already done');	
 	} catch(error){
@@ -60,7 +60,7 @@ exports.likeing = async (req, res, next) => {
 exports.likeDelete = async (req, res, next) => {
 	const postid = req.params.id;
 	try{
-		item.delLike(req.user.id, postid);
+		await item.delLike(req.user.id, postid);
 		UserCache[req.user.id].Status = 2;
 		return res.send("DELETE succese");	
 	} catch(error){

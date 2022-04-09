@@ -1,6 +1,6 @@
 module.exports= {
-		host	: '15.164.100.251',
-		port	: '57319',
+		host	: '13.124.242.161',
+		port	: '59129',
 		user	: 'IMNOOK',
 		password: 'dhksthxpa12',
 		database: 'nodebird',
