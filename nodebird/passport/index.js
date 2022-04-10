@@ -24,6 +24,7 @@ exports.passportConfig = () => {
 				result = await item.getFollowing(id);
 				UserCache[id].Followings = result;
 				result = await item.getLike(id);
+				UserCache[id].GoodPostId = result;
 				UserCache[id].Status = 0; //변경값 없음
 			} else if(UserCache[id].Status == 1 ) { //팔로잉 변경
 				result = await item.getFollowing(id);

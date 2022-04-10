@@ -44,10 +44,10 @@ const item = {
 				post.auther = auther.nick;
 				return post;
 			}))
+			return posts;
 		} catch (error) {
 			console.error(error);
 		}
-		return posts;
 	},
 	
 	getPostHashtagInfo: async (hashtag) => {
@@ -65,10 +65,9 @@ const item = {
 				const auther = await User.getUser(post.contenter);
 				post.LikeCount = likeCount.length;
 				post.auther = auther.nick;
-					return post;
+				return post;
 				}));
 			}
-			console.log(posts);
 			return posts;
 		} catch (error){
 			console.error(error);

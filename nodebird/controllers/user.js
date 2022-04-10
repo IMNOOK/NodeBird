@@ -21,9 +21,9 @@ exports.following = async (req, res, next) => {
 	try{
 		if(await item.setFollow(req.user.id, follower)){
 			UserCache[req.user.id].Status = 1;
-			return res.redirect('/');
+			return res.send('success');
 		}
-		return res.send('already done');
+		return res.status(404).send('no user');
 	} catch(error){
 		console.error(error);
 		next(error);

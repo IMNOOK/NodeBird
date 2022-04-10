@@ -1,12 +1,10 @@
 //다른 사람들이 만든 모듈
 const express = require('express');
 const fs = require('fs');
-const multer = require('multer');
-const path = require('path');
 
 // 내가 만든 모듈 or 미리 설정한 값 가져옴 
 const { isLoggedIn } = require('../controllers/middlewares');
-const { posting, deletePost } = require('../controllers/post');
+const { upload, upload2, posting, deletePost } = require('../controllers/post');
 
 // routes 코드 시작 및 각종 설정
 const router = express.Router();
@@ -18,19 +16,7 @@ try{
 	fs.mkdirSync('uploads');
 }
 
-const upload = multer({
-	storage: multer.diskStorage({
-		destination(req, file, cb) {
-			cb(null, 'uploads/');
-		},
-		filename(req, file, cb) {
-			const ext = path.extname(file.originalname);
-			cb(null, path.basename(file.originalname, ext) + Date.now() + ext);
-		},
-	}),
-	limits: { fileSize: 5 * 1024 * 1024}
-});
-
+//게시판 이미지 업로드
 router.post('/img', isLoggedIn, upload.single('img'), (req, res) => {
 	console.log(req.file);
 	res.json({url: `/img/${req.file.filename}`});
@@ -38,11 +24,10 @@ router.post('/img', isLoggedIn, upload.single('img'), (req, res) => {
 
 
 //게시판 글 올림
-const upload2 = multer();
-router.post('/', isLoggedIn, upload2.none(), (req, res, next) => posting(req, res, next));
+router.post('/', isLoggedIn, upload2.none(), posting);
 
 
 //유저 == 글쓴이 시 게시판 삭제
-router.delete('/:id', isLoggedIn, (req, res, next) => deletePost(req, res, next));
+router.delete('/:id', isLoggedIn, deletePost);
 
 module.exports = router;

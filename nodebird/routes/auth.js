@@ -8,9 +8,9 @@ const { join, login } = require('../controllers/auth');
 // routes 코드 시작 및 각종 설정
 const router = express.Router();
 
-router.post('/join',isNotLoggedIn, (req, res, next) => join(req, res, next));
+router.post('/join',isNotLoggedIn, join);
 
-router.post('/login', isNotLoggedIn, (req, res, next) => login(req, res, next));
+router.post('/login', isNotLoggedIn, login);
 
 router.get('/logout',isLoggedIn, (req, res, next) => {
 	req.logout();

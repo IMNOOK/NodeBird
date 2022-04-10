@@ -12,7 +12,7 @@ const router = express.Router();
 //post처럼 모든 자료를 끌고 오는 것이 아니라 각각의 개인 유저의 필요한 정보만 가져옴
 
 //로그인 시 req.user로 부터 렌더링 값 설정
-router.use((req, res, next) => UI(req, res, next));
+router.use(UI);
 
 router.get('/profile', isLoggedIn, (req, res) => {
 	return res.render('profile', { title: '내 정보 - NodeBird' });
@@ -23,9 +23,9 @@ router.get('/join', isNotLoggedIn, (req, res) => {
 });
 
 //메인 홈페이지: 모든 게시판 열람
-router.get('/', (req, res, next) => getMain(req, res, next));
+router.get('/', getMain);
 
 //메인 홈페이지: 해당 해쉬태그 게시판 열람
-router.get('/hashtag', (req, res, next) => getHashtag(req, res, next));
+router.get('/hashtag', getHashtag);
 
 module.exports = router;

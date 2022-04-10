@@ -9,15 +9,15 @@ const { updateProfile, following, followDelete, likeing,likeDelete } = require('
 // routes 코드 시작 및 각종 설정
 const router = express.Router();
 
-router.post('/profile', isLoggedIn, (req, res, next) => updateProfile(req, res, next));
+router.post('/profile', isLoggedIn, updateProfile);
 
 
-router.post('/:id/follow', isLoggedIn, (req, res, next) => following(req, res, next));
+router.post('/:id/follow', isLoggedIn, following);
 
-router.delete('/:id/follow', isLoggedIn, (req, res, next) => followDelete(req, res, next));
+router.delete('/:id/follow', isLoggedIn, followDelete);
 
-router.post('/:id/like', isLoggedIn, (req, res, next) => likeing(req, res, next));
+router.post('/:id/like', isLoggedIn, likeing);
 
-router.delete('/:id/like', isLoggedIn, (req, res, next) => likeDelete(req, res, next));
+router.delete('/:id/like', isLoggedIn, likeDelete);
 
 module.exports = router;
