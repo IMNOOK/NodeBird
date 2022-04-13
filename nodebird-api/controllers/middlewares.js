@@ -4,8 +4,6 @@ const pool = mysql.createPool(dbconfig);
 const jwt = require('jsonwebtoken');
 const rateLimit = require('express-rate-limit');
 
-
-
 //DB
 exports.con = pool.promise();
 

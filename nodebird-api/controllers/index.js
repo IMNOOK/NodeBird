@@ -1,8 +1,8 @@
 const { v4: uuidv4 } = require('uuid');
 
-const { con } = require('./db');
+const { con } = require('./middlewares');
 
-exports.main = async (req, res, next) => {
+exports.UI = async (req, res, next) => {
 	try{
 		let user;
 		let domains;
@@ -10,6 +10,7 @@ exports.main = async (req, res, next) => {
 			let [rows, fields] = await con.query("SELECT * FROM User WHERE id = ?", (req.user.id));
 			user = rows[0];
 			[ rows, fields ] = await con.query("SELECT * FROM Domain WHERE userId = ?", req.user.id);
+			domains = rows;
 		}
 		res.render('login', {
 			user,

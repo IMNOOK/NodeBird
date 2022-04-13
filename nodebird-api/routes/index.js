@@ -1,11 +1,11 @@
 const express = require('express');
-const { main, domain } = require('../controllers');
+const { UI, domain } = require('../controllers');
+const { isLoggedIn } = require('../controllers/middlewares');
 
 const router = express.Router();
 
-router.get('/', async ( req, res, next) => main(req, res, next));
+router.get('/', UI);
 
-
-router.post('/domain', isLoggedIn, async (req, res, next) => domain(req, res, next));
+router.post('/domain', isLoggedIn, domain);
 	
 module.exports = router;

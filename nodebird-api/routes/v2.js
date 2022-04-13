@@ -3,10 +3,15 @@ const jwt = require('jsonwebtoken');
 const cors = require('cors');
 const url = require('url');
 
-const { verifyToken, apiLimiter, con } = require('./middlewares');
+const { verifyToken, apiLimiter, con } = require('../controllers/middlewares');
 
 const router = express.Router();
 
+router.use(cors({
+	credentials: true,
+}));
+
+/*
 router.use(async (req, res, next) => {
 	const host = url.parse(req.get('origin')).host
 	console.log(host);
@@ -21,13 +26,17 @@ router.use(async (req, res, next) => {
 		next();
 	}
 });
+*/
 
 router.post('/token', apiLimiter, async (req, res) => {
 	const {clientSecret} = req.body;
 	try{
-		let [ rows, fields ] = await con.query('SELECT User.id, User.nick FROM Domain JOIN User ON Domain.userid = User.id WHERE clientSecret = ?' ,clientSecret);
+		console.log(clientSecret);
+		let [rows, fields] = await con.query(`SELECT * FROM Domain JOIN User ON Domain.userId = User.id`);
 		const domain = rows[0];
-		if(domain.length == 0) {
+		console.log(domain.id);
+		console.log(domain.nick);
+		if(domain == undefined) {
 			return res.status(401).json({
 				code: 401,
 				message: '등록되지 않은 도메인입니다. 먼저 도메인을 등록하세요'
@@ -53,7 +62,7 @@ router.post('/token', apiLimiter, async (req, res) => {
 	}
 });
 
-router.get('/tes', verifyToken, apiLimiter, (req, res) => {
+router.get('/test', verifyToken, apiLimiter, (req, res) => {
 	res.json(req.decode);
 });
 

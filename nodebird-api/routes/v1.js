@@ -1,12 +1,14 @@
 const express = require('express');
 const jwt =  require('jsonwebtoken');
 
-const { verifyToken, con, deprecated } = require('./middlewares');
+const { verifyToken, con, deprecated } = require('../controllers/middlewares');
 
 const router = express.Router();
 
 router.use(deprecated);
 
+
+//deprecated
 router.post('/token', async (req, res) => {
 	const { clientSecret } = req.body;
 	try{
