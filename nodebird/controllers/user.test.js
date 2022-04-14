@@ -3,6 +3,9 @@ const { updateProfile, following, followDelete, likeing, likeDelete } = require(
 jest.mock('../models/item');
 const { item } = require('../models/item');
 
+jest.mock('../passport');
+const {UserCache} = require('../passport');
+
 
 describe('following', () => {
 	const req = {
@@ -22,7 +25,7 @@ describe('following', () => {
 	});
 	
 	test('사용자를 못 찾으면 res.status(404).send(no user)를 호출함', async() => {
-		item.setFollow.mockReturnValue(0);
+		item.setFollow.mockReturnValue(undefined);
 		await following(req, res, next);
 		expect(res.status).toBeCalledWith(404);
 		expect(res.send).toBeCalledWith('no user');

@@ -19,7 +19,7 @@ exports.updateProfile = async (req, res, next) => {
 exports.following = async (req, res, next) => {
 	const follower = req.params.id;
 	try{
-		if(await item.setFollow(req.user.id, follower)){
+		if(await item.setFollow(req.user.id, follower) == 1){
 			UserCache[req.user.id].Status = 1;
 			return res.send('success');
 		}
